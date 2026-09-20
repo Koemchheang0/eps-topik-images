@@ -235,7 +235,7 @@ button{font-family:inherit;cursor:pointer}
 <script>
 const $=id=>document.getElementById(id);
 const DURATION=50*60;
-let Q=[],cur=0,answers={},review=false,timeLeft=DURATION,tick=null,fs=1,is=1;
+let Q=[],cur=0,answers={},review=false,timeLeft=DURATION,deadline=0,tick=null,fs=1,is=1;
 const PLAY='<svg class="ic-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="ic-pause" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>';
 const player=$('player');
 $('playBtn').innerHTML=PLAY;
@@ -266,8 +266,11 @@ $('startBtn').onclick=()=>{
   reshuffle();
   $('studentName').textContent=$('nameInput').value.trim();
   show('examView');render();
-  clearInterval(tick);tick=setInterval(()=>{timeLeft--;drawTimer();if(timeLeft<=0){clearInterval(tick);finish();}},1000);drawTimer();
+  deadline=Date.now()+DURATION*1000;
+  clearInterval(tick);tick=setInterval(syncTimer,1000);drawTimer();
 };
+function syncTimer(){if(review)return;timeLeft=Math.max(0,Math.ceil((deadline-Date.now())/1000));drawTimer();if(timeLeft<=0){clearInterval(tick);finish();}}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&tick)syncTimer();});
 function drawTimer(){const m=String(Math.floor(timeLeft/60)).padStart(2,'0'),s=String(timeLeft%60).padStart(2,'0');$('timer').textContent=m+':'+s;$('timer').classList.toggle('low',timeLeft<300);}
 
 function stopAudio(){clearTimeout(gapTimer);gapTimer=null;playing=null;player.pause();player.currentTime=0;document.querySelectorAll('.play.on').forEach(b=>b.classList.remove('on'));setLock();}
@@ -276,13 +279,13 @@ function playClip(key,btn){
   if(playing)return;                       // ignore clicks while a clip is running
   if(!review&&played[key]>=REPEAT)return;  // each clip may be heard only twice during the exam
   stopAudio();playing={key,btn,count:0};btn.classList.add('on');
-  player.src='audio/'+key+'.mp3';player.dataset.key=key;player.play().catch(()=>{});setLock();
+  player.src='audio/'+key+'.mp3';player.dataset.key=key;player.play().catch(()=>stopAudio());setLock();
 }
 player.onended=()=>{
   if(!playing)return;
   const p=playing;p.count++;
   if(review||p.count>=REPEAT){played[p.key]=REPEAT;stopAudio();if(!review)p.btn.classList.add('done');return;}
-  gapTimer=setTimeout(()=>{if(playing!==p)return;player.currentTime=0;player.play().catch(()=>{});},GAP);
+  gapTimer=setTimeout(()=>{if(playing!==p)return;player.currentTime=0;player.play().catch(()=>stopAudio());},GAP);
 };
 
 function render(){
@@ -325,7 +328,7 @@ function render(){
 $('playBtn').onclick=()=>playClip($('playBtn').dataset.key,$('playBtn'));
 function busy(){return !!playing&&!review;}
 $('prevBtn').onclick=()=>{if(busy())return;if(cur>0){cur--;render();}};
-$('nextBtn').onclick=()=>{if(busy())return;if(cur<Q.length-1){cur++;render();}else if(review){show('resultView');}else openGrid(true);};
+$('nextBtn').onclick=()=>{if(busy())return;if(cur<Q.length-1){cur++;render();}else if(review){stopAudio();show('resultView');}else openGrid(true);};
 $('fontUp').onclick=()=>{fs=Math.min(1.6,fs+.1);document.documentElement.style.setProperty('--fs',fs);};
 $('fontDown').onclick=()=>{fs=Math.max(.7,fs-.1);document.documentElement.style.setProperty('--fs',fs);};
 $('imgUp').onclick=()=>{is=Math.min(1.8,is+.15);document.documentElement.style.setProperty('--is',is);};
@@ -351,6 +354,7 @@ $('closeGrid').onclick=()=>$('gridModal').classList.add('hidden');
 $('submitBtn').onclick=()=>{$('gridModal').classList.add('hidden');finish();};
 
 function finish(){
+  $('gridModal').classList.add('hidden');
   clearInterval(tick);stopAudio();review=true;
   let r=0,l=0,w=0,u=0;
   Q.forEach(q=>{const a=answers[q.n];if(!a)u++;else if(a===q.answer){q.section==='reading'?r++:l++;}else w++;});
