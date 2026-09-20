@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UBT 02 · មជ្ឈមណ្ឌលអន្តរជាតិសេអ៊ូល</title>
+<link rel="icon" href="logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#1d4ed8;--sky:#0284c7;--ink:#111827;--muted:#64748b;--line:#cbd5e1;--ok:#16a34a;--bad:#dc2626;--fs:1}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;font-family:"Noto Sans KR","Kantumruy Pro",sans-serif;color:var(--ink);background:#eef4ff}
+button{font-family:inherit;cursor:pointer}
+.hidden{display:none!important}
+/* ---------- start ---------- */
+.start{min-height:100%;display:grid;place-items:center;padding:12px;background:radial-gradient(circle at top,#dbeafe,#eef4ff 60%)}
+.card{background:#fff;border-radius:22px;box-shadow:0 20px 60px rgba(30,64,175,.15);padding:22px 20px;width:min(520px,100%);text-align:center}
+.head{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:6px}
+.card img{width:56px;height:56px;border-radius:50%;box-shadow:0 4px 12px rgba(0,0,0,.12);flex:0 0 auto}
+.center-name{font-family:"Kantumruy Pro",sans-serif;font-weight:700;font-size:1.3rem;color:var(--blue);white-space:nowrap}
+.card h1{font-size:1.1rem;margin:6px 0 2px;white-space:nowrap}
+.card p{color:var(--muted);margin:2px 0 12px;font-family:"Kantumruy Pro",sans-serif;font-size:.9rem}
+.card input{width:100%;padding:10px 14px;border:1px solid var(--line);border-radius:12px;font-size:1rem;margin-bottom:12px;font-family:"Kantumruy Pro",sans-serif}
+.primary{width:100%;padding:12px;border:0;border-radius:12px;background:var(--blue);color:#fff;font-size:1.05rem;font-weight:700;font-family:"Kantumruy Pro",sans-serif}
+.contact{margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);text-align:left;font-family:"Kantumruy Pro",sans-serif;font-size:.88rem;line-height:1.7;color:#334155}
+.contact .ct-title{text-align:center;font-weight:700;color:var(--blue);margin:0 0 8px}
+.contact .loc{margin-bottom:6px}
+.contact a{color:var(--blue);font-weight:700;text-decoration:none;white-space:nowrap}
+.contact .phone{text-align:center;font-weight:700;font-size:1rem;margin-top:8px}
+/* ---------- exam ---------- */
+.exam{display:none;position:fixed;inset:0;flex-direction:column;background:#eef4ff}
+.exam.show{display:flex}
+.topbar{display:flex;align-items:center;gap:12px;padding:8px 16px;background:linear-gradient(90deg,#1e3a8a,#0369a1);color:#fff;flex:0 0 auto}
+.topbar img{width:40px;height:40px;border-radius:50%;background:#fff}
+.brand{display:flex;flex-direction:column;line-height:1.15}
+.brand b{font-family:"Kantumruy Pro",sans-serif;font-size:.95rem}
+.brand small{opacity:.85;font-size:.75rem}
+.tb-mid{margin-left:auto;text-align:center}
+.tb-mid strong{font-size:1.05rem}
+.tb-mid small{display:block;opacity:.9;font-size:.8rem}
+.timer{margin-left:auto;background:rgba(255,255,255,.15);padding:6px 14px;border-radius:10px;font-weight:700;font-size:1.1rem;font-variant-numeric:tabular-nums}
+.timer.low{background:#dc2626}
+.tools{display:flex;gap:6px}
+.tools button{background:rgba(255,255,255,.18);border:0;color:#fff;border-radius:8px;padding:6px 9px;font-weight:700}
+.main{flex:1 1 auto;min-height:0;padding:14px 18px;display:flex;flex-direction:column}
+.inst{background:#dbeafe;border-left:6px solid var(--blue);padding:10px 14px;border-radius:8px;font-weight:600;font-size:calc(1.02rem*var(--fs));margin-bottom:10px;flex:0 0 auto}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(360px,.9fr);gap:24px;flex:1 1 auto;min-height:0}
+.qcol,.ccol{min-width:0;overflow:auto;background:#fff;border-radius:14px;padding:16px 18px;box-shadow:0 4px 18px rgba(30,64,175,.08);position:relative}
+.ccol{background:#fff url(logo.png) center/58% no-repeat}
+.ccol::before{content:"";position:absolute;inset:0;background:rgba(255,255,255,.9);border-radius:14px}
+.ccol>*{position:relative}
+.qno{font-weight:700;font-size:calc(1.15rem*var(--fs));margin-bottom:8px}
+.qno span{color:var(--blue)}
+.passage{border:1px solid var(--line);border-radius:10px;padding:14px 16px;line-height:1.8;font-size:calc(1.05rem*var(--fs));background:#f8fafc;white-space:pre-wrap;margin-bottom:12px}
+.prompt{font-weight:600;font-size:calc(1.08rem*var(--fs));margin-bottom:12px}
+.qimg{display:block;max-width:100%;max-height:calc(56vh*var(--is,1));margin:0 auto;border-radius:10px;border:1px solid #e2e8f0}
+.audio{display:grid;place-items:center;gap:8px;padding:14px 0}
+.play{width:70px;height:70px;border-radius:50%;border:0;background:var(--sky);color:#fff;display:grid;place-items:center;box-shadow:0 8px 20px rgba(2,132,199,.35)}
+.play svg{width:32px;height:32px;fill:#fff}
+.play.on{background:#0f766e}
+.play.done{opacity:.35;filter:blur(1.5px);pointer-events:none;box-shadow:none}
+.play.on .ic-play,.play:not(.on) .ic-pause{display:none}
+.script{margin-top:12px;border:1px dashed var(--blue);background:#eff6ff;border-radius:10px;padding:10px 14px;white-space:pre-wrap;line-height:1.7;font-size:calc(.98rem*var(--fs))}
+.script b{color:var(--blue);display:block;margin-bottom:4px;font-size:.85rem}
+.cscript{color:var(--ink);font-size:calc(.95rem*var(--fs))}
+.choices{display:grid;gap:12px}
+.choices.pic{grid-template-columns:repeat(2,minmax(0,1fr))}
+.choice{display:flex;align-items:center;gap:14px;border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;background:#fff;text-align:left;font-size:calc(1.08rem*var(--fs));line-height:1.6;transition:.15s}
+.choice:hover{border-color:var(--sky)}
+.choice .num{flex:0 0 auto;width:38px;height:38px;border-radius:50%;border:2px solid var(--sky);display:grid;place-items:center;font-weight:700;color:var(--sky)}
+.choice.sel{background:#dbeafe;border-color:var(--blue)}
+.choice.sel .num{background:var(--blue);border-color:var(--blue);color:#fff}
+.choices.pic .choice{flex-direction:column;align-items:flex-start}
+.choices.pic .choice img{width:100%;height:calc(26vh*var(--is,1));object-fit:contain;border-radius:8px;background:#fff}
+.choice .cplay{margin:0;width:48px;height:48px;flex:0 0 auto}
+.choice .fill{flex:1 1 auto;min-height:24px}
+.choice .cplay svg{width:24px;height:24px}
+.choice.correct{background:#dcfce7;border-color:var(--ok)}
+.choice.wrong{background:#fee2e2;border-color:var(--bad)}
+.choice.correct .num{background:var(--ok);border-color:var(--ok);color:#fff}
+.choice.wrong .num{background:var(--bad);border-color:var(--bad);color:#fff}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 18px 14px;flex:0 0 auto}
+.nav button{border:0;border-radius:12px;padding:12px 22px;font-weight:700;font-size:1rem;font-family:"Kantumruy Pro",sans-serif}
+.nav .b{background:var(--blue);color:#fff}
+.nav .g{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.nav .s{background:var(--ok);color:#fff}
+.nav button.lock{opacity:.4;cursor:not-allowed}
+/* grid modal */
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.55);display:grid;place-items:center;z-index:50}
+.modal .box{background:#fff;border-radius:18px;padding:20px;width:min(720px,94vw);max-height:90vh;overflow:auto}
+.box h3{margin:0 0 6px;font-family:"Kantumruy Pro",sans-serif}
+.grid{display:grid;grid-template-columns:repeat(10,1fr);gap:8px;margin:8px 0 16px}
+.grid button{border:1px solid var(--line);border-radius:8px;padding:10px 0;font-weight:700;background:#fff}
+.grid button.done{background:#dbeafe;border-color:var(--blue);color:var(--blue)}
+.grid button.cur{outline:3px solid var(--ok)}
+.grid button.ok{background:#dcfce7;border-color:var(--ok)}
+.grid button.ng{background:#fee2e2;border-color:var(--bad)}
+.row{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.row button{border:0;border-radius:10px;padding:10px 18px;font-weight:700;font-family:"Kantumruy Pro",sans-serif}
+/* result */
+.result{display:none;min-height:100%;place-items:center;padding:24px}
+.result.show{display:grid}
+.score{font-size:3rem;font-weight:800;color:var(--blue)}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:14px 0;font-family:"Kantumruy Pro","Noto Sans KR",sans-serif}
+.stats div{background:#f1f5f9;border-radius:10px;padding:10px}
+.stats strong{display:block;font-size:1.3rem}
+@media (max-width:860px){
+ .cols{grid-template-columns:1fr;gap:10px;overflow:auto}
+ .qcol,.ccol{overflow:visible;padding:10px 12px;border-radius:10px}
+ .main{padding:8px 10px}
+ .topbar{padding:6px 10px;gap:8px}
+ .topbar img{width:30px;height:30px}
+ .brand b{font-size:.72rem;white-space:nowrap}
+ .tb-mid{white-space:nowrap}
+ .tb-mid small,.brand small{display:none}
+ .tb-mid strong{font-size:.85rem}
+ .timer{padding:4px 8px;font-size:.9rem}
+ .tools{display:none}
+ .inst{padding:6px 10px;font-size:calc(.85rem*var(--fs));margin-bottom:6px;border-left-width:4px}
+ .qno{font-size:calc(.95rem*var(--fs));margin-bottom:4px}
+ .prompt{font-size:calc(.95rem*var(--fs))}
+ .passage{padding:8px 10px;line-height:1.55;font-size:calc(.9rem*var(--fs));margin-bottom:6px}
+ .qimg{max-height:calc(28vh*var(--is,1))}
+ .audio{padding:6px 0}
+ .play{width:52px;height:52px}
+ .play svg{width:24px;height:24px}
+ .choices{gap:7px}
+ .choice{padding:8px 10px;gap:9px;font-size:calc(.9rem*var(--fs));line-height:1.45;border-radius:10px}
+ .choice .num{width:28px;height:28px;font-size:.85rem}
+ .choice .cplay{width:38px;height:38px}
+ .choice .cplay svg{width:18px;height:18px}
+ .choices.pic .choice img{height:calc(14vh*var(--is,1));max-height:none}
+ .grid{grid-template-columns:repeat(5,1fr)}
+ .nav{padding:6px 10px 8px;gap:6px}
+ .nav button{padding:9px 10px;font-size:.82rem;border-radius:9px}
+ .script{padding:8px 10px;font-size:calc(.85rem*var(--fs));line-height:1.55}
+}
+@media (max-height:520px) and (orientation:landscape){
+ .topbar{padding:4px 10px}
+ .topbar img{width:28px;height:28px}
+ .tb-mid small,.brand small{display:none}
+ .main{padding:6px 10px}
+ .cols{gap:10px}
+ .qcol,.ccol{padding:8px 10px}
+ .inst{padding:5px 10px;font-size:calc(.85rem*var(--fs));margin-bottom:6px}
+ .qno,.prompt{font-size:calc(.95rem*var(--fs))}
+ .passage{padding:6px 10px;line-height:1.5;font-size:calc(.88rem*var(--fs))}
+ .qimg{max-height:calc(50vh*var(--is,1))}
+ .audio{padding:4px 0}
+ .play{width:46px;height:46px}
+ .play svg{width:22px;height:22px}
+ .choices{gap:6px}
+ .choice{padding:6px 10px;font-size:calc(.88rem*var(--fs));line-height:1.4}
+ .choice .num{width:26px;height:26px;font-size:.8rem}
+ .choice .cplay{width:34px;height:34px}
+ .choices.pic .choice img{height:calc(18vh*var(--is,1))}
+ .nav{padding:4px 10px 6px}
+ .nav button{padding:7px 12px;font-size:.82rem}
+}
+</style>
+</head>
+<body>
+<section class="start" id="startView">
+  <div class="card">
+    <div class="head"><img src="logo.png" alt="logo"><div class="center-name">មជ្ឈមណ្ឌលអន្តរជាតិសេអ៊ូល</div></div>
+    <h1>EPS-TOPIK UBT · វិញ្ញាសាទី ០២</h1>
+    <p>សំណួរ ៤០ (អាន ២០ · ស្តាប់ ២០) · ពេលវេលា ៥០ នាទី</p>
+    <input id="nameInput" placeholder="ឈ្មោះសិស្ស (ស្រេចចិត្ត)">
+    <button class="primary" id="startBtn">ចាប់ផ្តើមប្រឡង</button>
+    <div class="contact">
+      <p class="ct-title">ចង់ចុះឈ្មោះចូលរៀនភាសាកូរ៉េ អាចមកមជ្ឈមណ្ឌលយើងបាន</p>
+      <div class="loc"><b>ទី១ ក្រុងកំពង់ចាម៖</b> ភូមិបឹងស្នាយ សង្កាត់សំបួរមាស ក្រុងកំពង់ចាម ខេត្តកំពង់ចាម <a href="https://maps.app.goo.gl/raTrwH9UuWN5mM6w9" target="_blank" rel="noopener">[Google Maps]</a></div>
+      <div class="loc"><b>ទី២ ស្រុកស្ទឹងត្រង់៖</b> ភូមិត្នោតតាសាយ ឃុំព្រែកក់ ស្រុកស្ទឹងត្រង់ ខេត្តកំពង់ចាម <a href="https://maps.app.goo.gl/VDn36fLPcJEoWxZE6" target="_blank" rel="noopener">[Google Maps]</a></div>
+      <div class="phone">Tel: <a href="tel:+855979955104">097 9955 104</a> / <a href="tel:+85581430354">081 430 354</a></div>
+    </div>
+  </div>
+</section>
+
+<section class="exam" id="examView">
+  <header class="topbar">
+    <img src="logo.png" alt="">
+    <div class="brand"><b>មជ្ឈមណ្ឌលអន្តរជាតិសេអ៊ូល</b><small id="studentName"></small></div>
+    <div class="tb-mid"><strong>UBT</strong><small><span id="secLabel">읽기</span> · <span id="pos">1 / 40</span></small></div>
+    <div class="timer" id="timer">50:00</div>
+    <div class="tools"><button id="fontDown">A−</button><button id="fontUp">A+</button><button id="imgDown">▧−</button><button id="imgUp">▧+</button></div>
+  </header>
+  <main class="main">
+    <div class="inst" id="inst"></div>
+    <div class="cols">
+      <div class="qcol">
+        <div class="qno"><span id="qno">1.</span> <span id="prompt" style="color:inherit"></span></div>
+        <div class="passage hidden" id="passage"></div>
+        <img class="qimg hidden" id="qimg" alt="">
+        <div class="audio hidden" id="audioZone">
+          <button class="play" id="playBtn" aria-label="play"></button>
+        </div>
+        <div class="script hidden" id="script"></div>
+      </div>
+      <div class="ccol"><div class="choices" id="choices"></div></div>
+    </div>
+  </main>
+  <nav class="nav">
+    <button class="g" id="prevBtn">◀ ថយក្រោយ</button>
+    <button class="g" id="gridBtn">▦ សំណួរទាំងអស់</button>
+    <button class="b" id="nextBtn">បន្ទាប់ ▶</button>
+  </nav>
+</section>
+
+<div class="modal hidden" id="gridModal">
+  <div class="box">
+    <h3>លេខសំណួរ</h3>
+    <small style="color:var(--muted)">읽기 · ការអាន</small><div class="grid" id="gridR"></div>
+    <small style="color:var(--muted)">듣기 · ការស្តាប់</small><div class="grid" id="gridL"></div>
+    <div class="row"><button style="background:#e2e8f0" id="closeGrid">បិទ</button><button style="background:var(--ok);color:#fff" id="submitBtn">ដាក់ចម្លើយ</button></div>
+  </div>
+</div>
+
+<section class="result" id="resultView">
+  <div class="card">
+    <div class="head"><img src="logo.png" alt="logo"><div class="center-name">មជ្ឈមណ្ឌលអន្តរជាតិសេអ៊ូល</div></div>
+    <p id="rName"></p>
+    <div class="score" id="score">0 / 100</div>
+    <div class="stats">
+      <div>ការអាន 읽기<strong id="sR">0/20</strong></div>
+      <div>ការស្តាប់ 듣기<strong id="sL">0/20</strong></div>
+      <div>ខុស<strong id="sW">0</strong></div>
+      <div>មិនទាន់ឆ្លើយ<strong id="sU">0</strong></div>
+    </div>
+    <div class="grid" id="gridRes" style="grid-template-columns:repeat(8,1fr)"></div>
+    <div class="row" style="justify-content:center"><button style="background:var(--blue);color:#fff" id="reviewBtn">មើលចម្លើយ</button><button style="background:#e2e8f0" id="retryBtn">ប្រឡងម្តងទៀត</button></div>
+  </div>
+</section>
+
+<audio id="player" preload="auto"></audio>
+<script>
+const $=id=>document.getElementById(id);
+const DURATION=50*60;
+let Q=[],cur=0,answers={},review=false,timeLeft=DURATION,tick=null,fs=1,is=1;
+const PLAY='<svg class="ic-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="ic-pause" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>';
+const player=$('player');
+$('playBtn').innerHTML=PLAY;
+const REPEAT=2;let GAP=4000;
+let played={},playing=null,gapTimer=null;
+const preloaded={};
+function preload(src){if(!preloaded[src]){const im=new Image();im.src=src;preloaded[src]=im;}}
+function preloadQ(q){if(!q)return;if(q.image)preload('img/'+q.image);if(q.picture)q.choices.forEach(c=>preload('img/'+c));}
+
+fetch('data.json').then(r=>r.json()).then(d=>{Q=d;Q.forEach(preloadQ);});
+
+function show(view){['startView','examView','resultView'].forEach(v=>{const el=$(v);el.classList.toggle('show',v===view);el.style.display=v===view?(v==='startView'?'grid':''):'none';});}
+show('startView');
+
+function reshuffle(){
+  Q.forEach(q=>{
+    const idx=[0,1,2,3];
+    for(let i=3;i>0;i--){const j=Math.floor(Math.random()*(i+1));[idx[i],idx[j]]=[idx[j],idx[i]];}
+    const ch=q.choices,cs=q.choice_scripts;
+    q.choices=idx.map(i=>ch[i]);
+    if(cs)q.choice_scripts=idx.map(i=>cs[i]);
+    q.answer=idx.indexOf(q.answer-1)+1;
+  });
+}
+$('startBtn').onclick=()=>{
+  if(!Q.length)return;
+  answers={};played={};review=false;cur=0;timeLeft=DURATION;
+  reshuffle();
+  $('studentName').textContent=$('nameInput').value.trim();
+  show('examView');render();
+  clearInterval(tick);tick=setInterval(()=>{timeLeft--;drawTimer();if(timeLeft<=0){clearInterval(tick);finish();}},1000);drawTimer();
+};
+function drawTimer(){const m=String(Math.floor(timeLeft/60)).padStart(2,'0'),s=String(timeLeft%60).padStart(2,'0');$('timer').textContent=m+':'+s;$('timer').classList.toggle('low',timeLeft<300);}
+
+function stopAudio(){clearTimeout(gapTimer);gapTimer=null;playing=null;player.pause();player.currentTime=0;document.querySelectorAll('.play.on').forEach(b=>b.classList.remove('on'));setLock();}
+function setLock(){document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('lock',busy()));}
+function playClip(key,btn){
+  if(playing)return;                       // ignore clicks while a clip is running
+  if(!review&&played[key]>=REPEAT)return;  // each clip may be heard only twice during the exam
+  stopAudio();playing={key,btn,count:0};btn.classList.add('on');
+  player.src='audio/'+key+'.mp3';player.dataset.key=key;player.play().catch(()=>{});setLock();
+}
+player.onended=()=>{
+  if(!playing)return;
+  const p=playing;p.count++;
+  if(review||p.count>=REPEAT){played[p.key]=REPEAT;stopAudio();if(!review)p.btn.classList.add('done');return;}
+  gapTimer=setTimeout(()=>{if(playing!==p)return;player.currentTime=0;player.play().catch(()=>{});},GAP);
+};
+
+function render(){
+  stopAudio();
+  const q=Q[cur];
+  $('pos').textContent=(cur+1)+' / '+Q.length;
+  $('secLabel').textContent=q.section==='reading'?'읽기':'듣기';
+  $('inst').textContent=q.inst;
+  $('qno').textContent=q.n+'.';
+  $('prompt').textContent=q.prompt||'';
+  $('passage').classList.toggle('hidden',!q.passage);$('passage').textContent=q.passage||'';
+  $('qimg').classList.toggle('hidden',!q.image);if(q.image)$('qimg').src='img/'+q.image;
+  $('audioZone').classList.toggle('hidden',!q.audio);$('playBtn').dataset.key=q.audio||'';
+  $('playBtn').classList.toggle('done',!review&&played[q.audio]>=REPEAT);
+  const sc=$('script');sc.classList.toggle('hidden',!(review&&q.script));
+  if(review&&q.script)sc.innerHTML='<b>듣기 대본</b>'+q.script.replace(/</g,'&lt;');
+  preloadQ(Q[cur+1]);preloadQ(Q[cur-1]);
+  const box=$('choices');box.innerHTML='';box.classList.toggle('pic',!!q.picture);
+  q.choices.forEach((c,i)=>{
+    const b=document.createElement('button');b.className='choice';
+    const n=`<span class="num">${i+1}</span>`;
+    if(q.picture)b.innerHTML=n+`<img src="img/${c}" alt="">`;
+    else if(q.audio_choices)b.innerHTML=n+`<span class="play cplay${!review&&played[c]>=REPEAT?' done':''}" data-key="${c}">${PLAY}</span>`+(review?`<span class="cscript">${q.choice_scripts[i]}</span>`:'<span class="fill"></span>');
+    else b.innerHTML=n+`<span>${c}</span>`;
+    if(answers[q.n]===i+1)b.classList.add('sel');
+    if(review){if(i+1===q.answer)b.classList.add('correct');else if(answers[q.n]===i+1)b.classList.add('wrong');}
+    b.onclick=e=>{
+      const p=e.target.closest('.cplay');
+      if(p){playClip(p.dataset.key,p);return;}
+      if(review)return;
+      answers[q.n]=i+1;
+      box.querySelectorAll('.choice').forEach((el,j)=>el.classList.toggle('sel',j===i));
+    };
+    box.appendChild(b);
+  });
+  $('prevBtn').disabled=cur===0;
+  $('nextBtn').textContent=cur===Q.length-1?(review?'ត្រឡប់ទៅលទ្ធផល':'ដាក់ចម្លើយ ✔'):'បន្ទាប់ ▶';
+  $('nextBtn').className=cur===Q.length-1&&!review?'s':'b';
+}
+$('playBtn').onclick=()=>playClip($('playBtn').dataset.key,$('playBtn'));
+function busy(){return !!playing&&!review;}
+$('prevBtn').onclick=()=>{if(busy())return;if(cur>0){cur--;render();}};
+$('nextBtn').onclick=()=>{if(busy())return;if(cur<Q.length-1){cur++;render();}else if(review){show('resultView');}else openGrid(true);};
+$('fontUp').onclick=()=>{fs=Math.min(1.6,fs+.1);document.documentElement.style.setProperty('--fs',fs);};
+$('fontDown').onclick=()=>{fs=Math.max(.7,fs-.1);document.documentElement.style.setProperty('--fs',fs);};
+$('imgUp').onclick=()=>{is=Math.min(1.8,is+.15);document.documentElement.style.setProperty('--is',is);};
+$('imgDown').onclick=()=>{is=Math.max(.5,is-.15);document.documentElement.style.setProperty('--is',is);};
+
+function gridBtn(q,i){
+  const b=document.createElement('button');b.textContent=q.n;
+  if(review){b.classList.add(answers[q.n]===q.answer?'ok':'ng');}
+  else if(answers[q.n])b.classList.add('done');
+  if(i===cur)b.classList.add('cur');
+  b.onclick=()=>{if(busy())return;cur=i;render();$('gridModal').classList.add('hidden');};
+  return b;
+}
+function openGrid(confirm){
+  $('gridR').innerHTML='';$('gridL').innerHTML='';
+  Q.forEach((q,i)=>(q.section==='reading'?$('gridR'):$('gridL')).appendChild(gridBtn(q,i)));
+  $('submitBtn').classList.toggle('hidden',review);
+  $('gridModal').classList.remove('hidden');
+  if(confirm){const left=Q.length-Object.keys(answers).length;$('submitBtn').textContent=left?`ដាក់ចម្លើយ (នៅសល់ ${left})`:'ដាក់ចម្លើយ';}
+}
+$('gridBtn').onclick=()=>{if(busy())return;openGrid(false);};
+$('closeGrid').onclick=()=>$('gridModal').classList.add('hidden');
+$('submitBtn').onclick=()=>{$('gridModal').classList.add('hidden');finish();};
+
+function finish(){
+  clearInterval(tick);stopAudio();review=true;
+  let r=0,l=0,w=0,u=0;
+  Q.forEach(q=>{const a=answers[q.n];if(!a)u++;else if(a===q.answer){q.section==='reading'?r++:l++;}else w++;});
+  $('score').textContent=((r+l)*2.5)+' / 100';
+  $('sR').textContent=r+'/20';$('sL').textContent=l+'/20';$('sW').textContent=w;$('sU').textContent=u;
+  $('rName').textContent=$('nameInput').value.trim()||'';
+  const g=$('gridRes');g.innerHTML='';Q.forEach((q,i)=>{const b=gridBtn(q,i);b.onclick=()=>{cur=i;show('examView');render();};g.appendChild(b);});
+  show('resultView');
+}
+$('reviewBtn').onclick=()=>{cur=0;show('examView');render();};
+$('retryBtn').onclick=()=>{show('startView');};
+</script>
+</body>
+</html>
